@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chores App</title>
+
+
+    <style>
+    ul {
+        list-style: none;
+    }
+</style>
+  </head>
+  <body>
+    <h1>Chore List </h1>
+
+
+
+
+    <form action="/your-name/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>
