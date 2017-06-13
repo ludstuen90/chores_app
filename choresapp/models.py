@@ -7,6 +7,12 @@ class Chore(models.Model):
     chore_name = models.CharField(max_length=24)
     description = models.CharField(max_length=64)
 
+    def get_absolute_url(self):
+        # return reverse('success_view', kwargs={'pk': self.pk})
+        return reverse('success_view')
+
+
+
     def __str__(self):
         return self.chore_name
 

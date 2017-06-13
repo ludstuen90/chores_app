@@ -21,4 +21,5 @@ from choresapp.views import HomeView
 urlpatterns = [
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^admin/', admin.site.urls),
+    url(r'^clean_submission/', lambda r: HttpResponse("Successfully submitted"), name='success_view'),
 ]
