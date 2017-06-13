@@ -18,35 +18,21 @@ class HomeView(FormView):
     success_url = '/clean_submission/'
 
     def form_valid(self, form):
-            # This method is called when valid form data has been POSTed.
-            # It should return an HttpResponse.
-            # form.send_email()
-            if form.is_valid():
-                print("Yes, the form was valid!")
-                print(repr(form.cleaned_data['chores']))
-                chore_submitted = Chore.objects.get(id=form.cleaned_data['chores'])
-                boyfriend_submitting = Boyfriend.objects.get(id=1)
-                c = Clean.objects.create(chore_completed=chore_submitted, cleaner=boyfriend_submitting)
-                c.save()
-            # chore_completed = Chore.objects.filter(id=form.cleaned_data['chores'])
-            # print('chore is: ', chore_completed )
-            # print(" ^^^^A FORM HAS BEEN SUBMITTED SUCCESSFULLY")
-                # submitted_clean = Clean(chore_completed = 3)
-                # submitted_clean.save()
-                return super(HomeView, self).form_valid(form)
+        if form.is_valid():
+            chore_submitted = Chore.objects.get(id=form.cleaned_data['chores'])
+            boyfriend_submitting = Boyfriend.objects.get(id=1)
+            c = Clean.objects.create(chore_completed=chore_submitted, cleaner=boyfriend_submitting)
+            c.save()
+            return super(HomeView, self).form_valid(form)
 
-
-
-    # def get_context_data(self, **kwargs):
-    #
-    #     all_cleans= {}
-    #     for x in Chore.objects.order_by('chore_name').all():
-    #         most_recent_object = Clean.objects.filter(chore_completed__id=x.id).last()
-    #         print(x, most_recent_object.id)
-    #         marshall_id = most_recent_object.id
-    #         all_cleans[most_recent_object.id] = most_recent_object.time
-    #     context = super(HomeView, self).get_context_data(**kwargs)
-    #     context['alldata'] = all_cleans
-    #     print('looking at: ', context['alldata'])
-    #
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        list_all_chores = Chore.objects.values('id').all()
+        most_recent_chores = {}
+        for z in list_all_chores:
+            retrieved_chore = Clean.objects.filter(chore_completed=z['id']).latest('time')
+            print('z: ', z['id'], retrieved_chore.chore_completed.chore_name)
+            most_recent_chores[z['id']] = retrieved_chore
+        context['pagetitle'] = 'My special Title'
+        context['most_recent_chores'] = most_recent_chores
+        return context
